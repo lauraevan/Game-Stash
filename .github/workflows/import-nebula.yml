@@ -55,6 +55,8 @@ jobs:
 
           source_games = src.get("games", [])
           imported = []
+          stale_catalog_refs = []
+          cataloged_relpaths = set()
 
           for game in source_games:
               rel = str(game.get("file", ""))
@@ -63,8 +65,14 @@ jobs:
 
               local_path = os.path.join("Games", rel).replace(os.sep, "/")
               if not os.path.isfile(local_path):
-                  raise SystemExit(f"Missing NEBULA payload for {game.get('name')}: {local_path}")
+                  stale_catalog_refs.append({
+                      "id": game.get("id"),
+                      "name": game.get("name"),
+                      "file": game.get("file"),
+                  })
+                  continue
 
+              cataloged_relpaths.add(rel.replace(os.sep, "/"))
               item = {
                   "id": f"nebula-{game['id']}",
                   "name": game["name"],
@@ -78,6 +86,33 @@ jobs:
                   "hash": game.get("hash"),
               }
               imported.append(item)
+
+          # The filesystem is authoritative. Add any real HTML payload omitted
+          # by the generated source catalog.
+          for base, _, names in os.walk("/tmp/nebula/games"):
+              for name in names:
+                  if not name.lower().endswith(".html"):
+                      continue
+                  src_path = os.path.join(base, name)
+                  rel = os.path.relpath(src_path, "/tmp/nebula/games").replace(os.sep, "/")
+                  if rel in cataloged_relpaths:
+                      continue
+
+                  slug = rel[:-5].replace("/", "-").lower()
+                  title = os.path.splitext(os.path.basename(rel))[0].replace("-", " ").replace("_", " ").title()
+                  imported.append({
+                      "id": f"nebula-file-{slug}",
+                      "name": title,
+                      "gameUrl": ("Games/" + rel),
+                      "source": "GoatTech-42/NEBULACDN",
+                      "slug": slug,
+                      "category": "Other",
+                      "tags": ["browser", "html5"],
+                      "description": f"Play {title} in your browser.",
+                      "size": os.path.getsize(src_path),
+                      "hash": None,
+                  })
+                  cataloged_relpaths.add(rel)
 
           # Idempotent re-run: replace an earlier NEBULA import instead of duplicating it.
           existing = [
@@ -108,6 +143,8 @@ jobs:
               "source": "GoatTech-42/NEBULACDN",
               "sourceCommit": source_commit,
               "catalogGames": len(imported),
+              "sourceCatalogEntries": len(source_games),
+              "staleCatalogReferences": stale_catalog_refs,
               "sourceStats": src.get("stats", {}),
               "copiedPayloadFiles": payload_count,
               "copiedPayloadBytes": payload_bytes,
@@ -230,9 +267,12 @@ jobs:
           with open("/tmp/nebula/games.json", "r", encoding="utf-8") as f:
               source_catalog = json.load(f)
 
-          expected = len(source_catalog.get("games", []))
+          expected = 0
+          for base, _, names in os.walk("/tmp/nebula/games"):
+              expected += sum(1 for name in names if name.lower().endswith(".html"))
+
           if len(imported) != expected:
-              raise SystemExit(f"Expected {expected} NEBULA catalog entries, got {len(imported)}")
+              raise SystemExit(f"Expected {expected} real NEBULA HTML games, got {len(imported)} catalog entries")
 
           missing = []
           for game in imported:
