@@ -1,0 +1,445 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L7856P3VNT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L7856P3VNT');
+</script><html><head>
+   
+    <title>Ice Dodo - Play Online at Onionfist.com</title>
+    <base href="https://cdn.jsdelivr.net/gh/genizy/ice-dodo/">
+    <meta charset="utf-8">
+    <meta name="description" content="Ice Dodo is a popular 3D obstacle game. The controls are simple but the maps are terribly complex! The game is free and all levels are unlocked.">
+    <meta name="keywords" content="Ice Dodo, icedodo, Onionfist, 3d game, slope">
+    <meta name="author" content="Seojoon Yeon">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/libs/jquery-3.3.1.js"></script><style type="text/css" id="operaUserStyle">#sidebarad1,
+#sidebarad2 {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 160px;
+  height: 600px;
+  padding: 0;
+  margin: 0;
+  z-index: 999999;
+}
+#sidebarad1 {
+  left: 0;
+}
+#sidebarad2 {
+  right: 0;
+}
+.sidebar-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
+  text-align: center;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+  z-index: 10;
+}
+.sidebar-frame {
+  width: 160px;
+  height: 600px;
+  border: none;
+  display: block;
+}
+</style>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/css/world.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/css/screen.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/css/popup.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/css/tabs.css">
+ <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo/maps/tut1.js"></script></head>
+ <body style="width: 100%; height: 100%;">
+    
+    <canvas id="renderCanvas" width="723" height="600" tabindex="1"></canvas>
+    <br>
+    
+    <button class="button" id="backtomenu2" style="display: none;">
+       <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"></path>
+       </svg>
+    </button>
+    <div id="controls_reversed" style="display: none;">
+       <h2>CONTROLS REVERSED</h2>
+       <br>
+       <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-arrow-left-right" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5zm14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5z"></path>
+       </svg>
+    </div>
+    <div id="jump_enabled" style="display: none;">
+       <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-arrow-bar-up" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M8 10a.5.5 0 0 0 .5-.5V3.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 3.707V9.5a.5.5 0 0 0 .5.5zm-7 2.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5z"></path>
+       </svg>
+       <br>
+       <h2>SPACEBAR TO JUMP</h2>
+    </div>
+    <div id="curr_time">TIME: 552</div>
+    <div id="best_time"></div>
+    
+    
+    
+    <div id="preroll"></div>
+    <div id="popup" style="visibility: visible;">
+       <div id="news">
+       </div>
+       <center id="cup_container">
+          <img id="cup_img" class="search_off" src="assets/skins/beginner_cup.png">
+          <div id="cup">
+             <div class="change_cup" id="change_cup_left">
+                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
+                   <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"></path>
+                </svg>
+             </div>
+             <div id="cup_mid">
+                <div id="cup_name">Ice Dodo</div>
+                <div id="play_cup" class="search_off">PLAY</div>
+                <img src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/assets/skins/finder_cup.png" class="search_on" style="width: 70px; display: none;">
+                <div id="cup_info">
+                   <div>
+                      <span id="cup_weighted" class="search_off">0 pt</span>
+                      <div id="search_filter" class="search_setting_btn search_on" style="display: none;">
+                         <span>---</span>
+                      </div>
+                   </div>
+                   <div id="cups_btn">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-grid-3x3-gap-fill" viewBox="0 0 16 16">
+                         <path d="M1 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V2zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V2zM1 7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V7zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V7zM1 12a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-2zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-2zm5 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-2z"></path>
+                      </svg>
+                   </div>
+                   <div>
+                      <span id="cup_percent" class="search_off">0 %</span>
+                      <div id="search_order" class="search_setting_btn search_on" style="display: none;">
+                         <span>---</span>
+                      </div>
+                   </div>
+                </div>
+             </div>
+             <div class="change_cup" id="change_cup_right">
+                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                   <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"></path>
+                </svg>
+             </div>
+          </div>
+          <div id="duck_container">
+             <a id="duck" href="https://iceparty.io" target="_blank">
+             <img src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/assets/icons/duck.png">
+             </a>
+          </div>
+          <div class="search_on" id="search_container" style="display: none;">
+             <h1 class="subt">Search map name</h1>
+             <input id="search_input" type="text" placeholder="Type here">
+             <button id="search_btn">Search</button>
+          </div>
+          <div id="maps"><div class="map done_z" id="beginner_map_tut1"><h2 class="map_name">Welcome Map</h2><div class="map_desc">DIFFICULTY: 1 - Click to Play</div></div><div class="map done_z" id="beginner_map_lucid_dreams"><h2 class="map_name">Lucid Dreams</h2><div class="map_desc">DIFFICULTY: 1 - Click to Play</div></div><div class="map done_z" id="beginner_map_slow_walk"><h2 class="map_name">Slow Walk</h2><div class="map_desc">DIFFICULTY: 1 - Click to Play</div></div><div class="map done_z" id="beginner_map_ice_cold"><h2 class="map_name">Ice Cold</h2><div class="map_desc">DIFFICULTY: 2 - Click to Play</div></div><div class="map done_z" id="beginner_map_heights"><h2 class="map_name">Heights</h2><div class="map_desc">DIFFICULTY: 2 - Click to Play</div></div><div class="map done_z" id="beginner_map_ice2"><h2 class="map_name">Snowboarder</h2><div class="map_desc">DIFFICULTY: 2 - Click to Play</div></div><div class="map done_z" id="beginner_map_tilted_tracks"><h2 class="map_name">Tilted Tracks</h2><div class="map_desc">DIFFICULTY: 2 - Click to Play</div></div><div class="map done_z" id="beginner_map_spook"><h2 class="map_name">Spook</h2><div class="map_desc">DIFFICULTY: 3 - Click to Play</div></div><div class="map done_z" id="beginner_map_megafauna"><h2 class="map_name">Megafauna</h2><div class="map_desc">DIFFICULTY: 3 - Click to Play</div></div><div class="map done_z" id="beginner_map_easydrifting"><h2 class="map_name">Easy Drifting</h2><div class="map_desc">DIFFICULTY: 3 - Click to Play</div></div><div class="map done_z" id="beginner_map_dodo_type_beat"><h2 class="map_name">Dodo Type Beat</h2><div class="map_desc">DIFFICULTY: 3 - Click to Play</div></div><div class="map done_z" id="beginner_map_atmosphere"><h2 class="map_name">Atmosphere</h2><div class="map_desc">DIFFICULTY: 3 - Click to Play</div></div><div class="map done_z" id="beginner_map_scorpion"><h2 class="map_name">Scorpion</h2><div class="map_desc">DIFFICULTY: 3 - Click to Play</div></div><div class="map done_z" id="beginner_map_blizzard"><h2 class="map_name">Blizzard</h2><div class="map_desc">DIFFICULTY: 3 - Click to Play</div></div><div class="map done_z" id="beginner_map_topsy_turvy"><h2 class="map_name">topsy turvy</h2><div class="map_desc">DIFFICULTY: 3 - Click to Play</div></div><div class="map done_z" id="beginner_map_fade"><h2 class="map_name">Fade</h2><div class="map_desc">DIFFICULTY: 4 - Click to Play</div></div><div class="map done_z" id="beginner_map_river"><h2 class="map_name">River</h2><div class="map_desc">DIFFICULTY: 4 - Click to Play</div></div><div class="map done_z" id="beginner_map_blink_street"><h2 class="map_name">Blink Street</h2><div class="map_desc">DIFFICULTY: 4 - Click to Play</div></div><div class="map done_z" id="beginner_map_aurora"><h2 class="map_name">Aurora</h2><div class="map_desc">DIFFICULTY: 4 - Click to Play</div></div><div class="map done_z" id="beginner_map_motor"><h2 class="map_name">Motor</h2><div class="map_desc">DIFFICULTY: 4 - Click to Play</div></div><div class="map done_z" id="beginner_map_conveyor"><h2 class="map_name">Conveyor</h2><div class="map_desc">DIFFICULTY: 4 - Click to Play</div></div><div class="map done_z" id="beginner_map_frost_factory"><h2 class="map_name">frost factory</h2><div class="map_desc">DIFFICULTY: 4 - Click to Play</div></div><div class="map done_z" id="beginner_map_glass_staircase"><h2 class="map_name">Glass Staircase</h2><div class="map_desc">DIFFICULTY: 4 - Click to Play</div></div><div class="map done_z" id="beginner_map_coneycliffs"><h2 class="map_name">Coney Cliffs</h2><div class="map_desc">DIFFICULTY: 5 - Click to Play</div></div><div class="map done_z" id="beginner_map_tenet"><h2 class="map_name">Tenet</h2><div class="map_desc">DIFFICULTY: 5 - Click to Play</div></div><div class="map done_z" id="beginner_map_cone1"><h2 class="map_name">4D Demon Cinema</h2><div class="map_desc">DIFFICULTY: 6 - Click to Play</div></div><div class="map done_z" id="beginner_map_snowmen_land"><h2 class="map_name">Snowmen Land</h2><div class="map_desc">DIFFICULTY: 6 - Click to Play</div></div><div class="map done_z" id="beginner_map_og7"><h2 class="map_name">Cloud</h2><div class="map_desc">DIFFICULTY: 6 - Click to Play</div></div><div class="map done_z" id="beginner_map_colour_land"><h2 class="map_name">Colour Land</h2><div class="map_desc">DIFFICULTY: 6 - Click to Play</div></div><div class="map done_z" id="beginner_map_transcendence"><h2 class="map_name">Transcendence</h2><div class="map_desc">DIFFICULTY: 6 - Click to Play</div></div><div class="map done_z" id="beginner_map_spitting_spikes"><h2 class="map_name">Spitting Spikes</h2><div class="map_desc">DIFFICULTY: 7 - Click to Play</div></div><div class="map done_z" id="beginner_map_tremor"><h2 class="map_name">Tremor</h2><div class="map_desc">DIFFICULTY: 7 - Click to Play</div></div><div class="map done_z" id="beginner_map_spacecanyon"><h2 class="map_name">Space Canyon</h2><div class="map_desc">DIFFICULTY: 8 - Click to Play</div></div><div class="map done_z" id="beginner_map_dodo_kong"><h2 class="map_name">Dodo Kong</h2><div class="map_desc">DIFFICULTY: 8 - Click to Play</div></div></div>
+          <br>
+          <div id="search_exception" style="display: none;">
+          </div>
+          <div class="search_off">
+             <div id="more_levels" style="margin: 15px 0px;">
+                More Maps
+             </div>
+             <h1 class="subt">New maps sneak-peek</h1>
+             <div id="social_icons">
+                <a href="https://discord.gg/S8kZjgb" target="_blank">
+                <img src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/assets/social_icons/discord.svg">
+                </a>
+                <a href="https://www.instagram.com/onionfist/" target="_blank">
+                <img src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/assets/social_icons/instagram.svg">
+                </a>
+                <a href="https://www.facebook.com/onionfist" target="_blank">
+                <img src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/assets/social_icons/facebook.svg">
+                </a>
+                <a href="https://twitter.com/onion_fist" target="_blank">
+                <img src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/assets/social_icons/twitter.svg">
+                </a>
+             </div>
+             <br>
+             <h1 class="subt">More by Onionfist Studio</h1>
+             <p>
+                <a class="my_ad" target="_blank" href="https://onionfist.com/icedodo/">Full-Screen Ice Dodo</a>
+             </p>
+             <p>
+                <a class="my_ad" target="_blank" href="https://iceparty.io/">Multiplayer Ice Dodo</a>
+             </p>
+             <p>
+                <a class="my_ad" target="_blank" href="https://subcitizens.onionfist.com/">Sub Citizens</a>
+             </p>
+             <br>
+             <h1 class="subt">How to Support Us</h1>
+             <p class="arial">
+                To support our free game:
+             </p>
+             <p>
+                <a class="my_ad" target="_blank" href="https://chrome.google.com/webstore/detail/ice-dodo/jhidcpailhmpjpbdbhceiaeeggkalgmd">Leave a Review! ❤️</a>
+             </p>
+             <p>
+                <a class="my_ad" target="_blank" href="https://www.buymeacoffee.com/seojoony">Donate ❤️</a>
+             </p>
+             <br>
+             <div style="color: #808080; margin: 15px 0px; font-family: Arial; font-size: 14px; width: 300px;">
+                2021 Onionfist Studio. All Rights Reserved. Contact: flyingdodo9000@gmail.com <br>
+                By using Ice Dodo, you agree to our <a href="https://onionfist.com/privacy_policy/" target="_blank" style="color: #808080; text-decoration: underline !important; color: #b5b5b5; border: none !important;">Privacy Policy</a> and 
+                <a href="https://onionfist.com/terms_of_service/" target="_blank" style="color: #808080; text-decoration: underline !important; color: #b5b5b5; border: none !important;">Terms of Service</a>
+             </div>
+          </div>
+          <br>
+       </center>
+       <br>
+       <br>
+       <br>
+    </div>
+    <div id="map_text" style="visibility: visible; display: none;">Dodge the spikes!</div>
+    <div id="alert" class="tab" style="z-index: 1000; display: none;">
+       <p>
+          Please consider disabling your ad-blocker to support Ice Dodo!
+       </p>
+       <br>
+       <button class="button" id="alert_close">OK</button>
+    </div>
+    <div id="screen" style="visibility: hidden;">
+       <div style="height: 30px;"></div>
+       <h1 id="screen_map_name">Welcome Map</h1>
+       <h1 id="screen_map_about">Made by: Dododo73</h1>
+       <h1 id="screen_dialog" style="color: rgb(224, 76, 79);">Died From Cone</h1>
+       <h1 id="screen_info"></h1>
+       <table>
+          <tbody><tr>
+             <th>
+                <button class="button" id="play_again" style="display: none;">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"></path>
+                      <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"></path>
+                   </svg>
+                   <span>RESTART</span>
+                </button>
+             </th>
+             <th>
+                <button class="button" id="restart">
+                   <svg id="restart_icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"></path>
+                      <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"></path>
+                   </svg>
+                   <svg id="next_lvl_icon" style="padding-right: 6px; display: none;" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-emoji-laughing" viewBox="0 0 16 16">
+                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                      <path d="M12.331 9.5a1 1 0 0 1 0 1A4.998 4.998 0 0 1 8 13a4.998 4.998 0 0 1-4.33-2.5A1 1 0 0 1 4.535 9h6.93a1 1 0 0 1 .866.5zM7 6.5c0 .828-.448 0-1 0s-1 .828-1 0S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 0-1 0s-1 .828-1 0S9.448 5 10 5s1 .672 1 1.5z"></path>
+                   </svg>
+                   <span id="restart_text">RESTART</span>
+                </button>
+             </th>
+             <th>
+                <button class="button" id="backtomenu">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"></path>
+                   </svg>
+                   <span>MENU</span>
+                </button>
+             </th>
+          </tr>
+          <tr>
+             <th></th>
+             <th><i id="shortcut_label">SPACEBAR</i></th>
+             <th></th>
+          </tr>
+       </tbody></table>
+       <br>
+       <a target="_blank" id="map_leaderboard" class="leaderboard_buttons" href="https://onionfist.com/icelb?map_id=tut1&amp;sort_by=exp">Open Leaderboard</a>
+       <h1 class="speedrun_info" id="speedrun_best"></h1>
+       <h1 class="speedrun_info" id="speedrun_now"></h1>
+    </div>
+    <table id="menu" style="visibility: visible;">
+       <tbody><tr>
+          <th class="btn" id="play_tab_btn" style="color: rgb(255, 255, 255);">
+             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
+                <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path>
+             </svg>
+          </th>
+          <th class="btn" id="ranks_btn">
+             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-trophy-fill" viewBox="0 0 16 16">
+                <path d="M2.5.5A.5.5 0 0 1 3 0h10a.5.5 0 0 1 .5.5c0 .538-.012 1.05-.034 1.536a3 3 0 1 1-1.133 5.89c-.79 1.865-1.878 2.777-2.833 3.011v2.173l1.425.356c.194.048.377.135.537.255L13.3 15.1a.5.5 0 0 1-.3.9H3a.5.5 0 0 1-.3-.9l1.838-1.379c.16-.12.343-.207.537-.255L6.5 13.11v-2.173c-.955-.234-2.043-1.146-2.833-3.012a3 3 0 1 1-1.132-5.89A33.076 33.076 0 0 1 2.5.5zm.099 2.54a2 2 0 0 0 .72 3.935c-.333-1.05-.588-2.346-.72-3.935zm10.083 3.935a2 2 0 0 0 .72-3.935c-.133 1.59-.388 2.885-.72 3.935z"></path>
+             </svg>
+          </th>
+          <th class="btn" id="skins_btn">
+             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-palette-fill" viewBox="0 0 16 16">
+                <path d="M12.433 10.07C14.133 10.585 16 11.15 16 8a8 8 0 1 0-8 8c1.996 0 1.826-1.504 1.649-3.08-.124-1.101-.252-2.237.351-2.92.465-.527 1.42-.237 2.433.07zM8 5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm4.5 3a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zM5 6.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm.5 6.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"></path>
+             </svg>
+          </th>
+          <th class="btn" id="about_btn">
+             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-stars" viewBox="0 0 16 16">
+                <path d="M7.657 6.247c.11-.33.576-.33.686 0l.645 1.937a2.89 2.89 0 0 0 1.829 1.828l1.936.645c.33.11.33.576 0 .686l-1.937.645a2.89 2.89 0 0 0-1.828 1.829l-.645 1.936a.361.361 0 0 1-.686 0l-.645-1.937a2.89 2.89 0 0 0-1.828-1.828l-1.937-.645a.361.361 0 0 1 0-.686l1.937-.645a2.89 2.89 0 0 0 1.828-1.828l.645-1.937zM3.794 1.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387A1.734 1.734 0 0 0 4.593 5.69l-.387 1.162a.217.217 0 0 1-.412 0L3.407 5.69A1.734 1.734 0 0 0 2.31 4.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387A1.734 1.734 0 0 0 3.407 2.31l.387-1.162zM10.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732L9.1 2.137a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L10.863.1z"></path>
+             </svg>
+          </th>
+          <th class="btn" id="settings_btn">
+             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16">
+                <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"></path>
+             </svg>
+          </th>
+       </tr>
+    </tbody></table>
+    <audio controls="" id="audio">
+       <source src="assets/music/env2.mp3" id="audiosource">
+    </audio>
+    <audio controls="" id="sound_level_complete">
+       <source src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/assets/sounds/level_complete.wav" type="audio/wav">
+    </audio>
+    <audio controls="" id="sound_die">
+       <source src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/assets/sounds/die.wav" type="audio/wav">
+    </audio>
+    <div class="tab" id="cups_tab" style="visibility: hidden; position: absolute; z-index: -10;">
+       <p class="title" id="list_cups_title">Choose a Cup</p>
+       <div id="list_cups"><img class="cup_list_img" src="assets/skins/beginner_cup.png" id="show_up_beginner" cup_name="Ice Dodo"><img class="cup_list_img" src="assets/skins/carrot_cup.png" id="show_up_carrot" cup_name="Carrot cup"><img class="cup_list_img" src="assets/skins/rocky_cup.png" id="show_up_rocky" cup_name="Rocky cup"><img class="cup_list_img" src="assets/skins/dodo_cup.png" id="show_up_dodo" cup_name="Dodo cup"><img class="cup_list_img" src="assets/skins/skilled_cup.png" id="show_up_skilled" cup_name="Skilled cup"><img class="cup_list_img" src="assets/skins/furby_cup.png" id="show_up_furby" cup_name="Furby cup"><img class="cup_list_img" src="assets/skins/doom_cup.png" id="show_up_doom" cup_name="Doom cup"><img class="cup_list_img" src="assets/skins/kazil_cup.png" id="show_up_kazil" cup_name="Kazil cup"><img class="cup_list_img" src="assets/skins/ye_cup.png" id="show_up_ye" cup_name="Ye cup"><img class="cup_list_img" src="assets/skins/tim_cup.png" id="show_up_tim" cup_name="Tim cup"><img class="cup_list_img" src="assets/skins/ghoul_cup.png" id="show_up_ghoul" cup_name="Ghoul cup"><img class="cup_list_img" src="assets/skins/rytai_cup.png" id="show_up_rytai" cup_name="Rytai cup"><img class="cup_list_img" src="assets/skins/jay_cup.png" id="show_up_jay" cup_name="Jay cup"><img class="cup_list_img" src="assets/skins/crazy_cup.png" id="show_up_crazy" cup_name="Crazy cup"><img class="cup_list_img" src="assets/skins/june_cup.png" id="show_up_june" cup_name="June cup"><img class="cup_list_img" src="assets/skins/sleepy_cup.png" id="show_up_sleepy" cup_name="Sleepy cup"><img class="cup_list_img" src="assets/skins/mango_cup.png" id="show_up_mango" cup_name="Mango cup"><img class="cup_list_img" src="assets/skins/squirrel_cup.png" id="show_up_squirrel" cup_name="Squirrel cup"><img class="cup_list_img" src="assets/skins/collab_cup.png" id="show_up_collab" cup_name="Collab cup"><img class="cup_list_img" src="assets/skins/og_cup.png" id="show_up_og" cup_name="O.G. cup"><img class="cup_list_img" src="assets/skins/vault_cup.png" id="show_up_vault" cup_name="Vault cup"><img class="cup_list_img" src="assets/skins/finder_cup.png" id="show_up_finder" cup_name="Finder"></div>
+    </div>
+    <div class="tab" id="ranks_tab" style="visibility: hidden; position: absolute; z-index: -10;">
+       <p class="title">
+          SCORES
+       </p>
+       <h1 class="subt">Leaderboard</h1>
+       <div>
+          <input type="text" id="mem_name" maxlength="15" style="width: 130px;" placeholder="your name">
+          <a target="_blank" id="leaderboard_button" class="leaderboard_buttons" href="https://onionfist.com/icesave#v3077543761QGRkcz0wLGJlYXQ9MCxuYW09LHVuaT0zNzU1NTk0MzYyODQ4LHZlcj13ZWI=">Save to Leaderboard</a>
+          <p>Click the above button often<br>to keep your progress saved<br>and sync scores everywhere.</p>
+          <p id="name_error" style="display: none;">Name must contain only A-Z, 0-9, dot, underscore and space.</p>
+       </div>
+       <h1 class="subt">Overall</h1>
+       <div id="records_overall"><p>Dodo Sweat: 0 pt</p><p>Dodo Tears: 0 %</p></div>
+       <h1 class="subt">Breakdown</h1>
+       <table id="records_per_cup"><tr><th>Ice Dodo</th><th>0 pt</th><th>0 %</th></tr><tr><th>Carrot cup</th><th>0 pt</th><th>0 %</th></tr><tr><th>Rocky cup</th><th>0 pt</th><th>0 %</th></tr><tr><th>Dodo cup</th><th>0 pt</th><th>0 %</th></tr><tr><th>Skilled cup</th><th>0 pt</th><th>0 %</th></tr><tr><th>Furby cup</th><th>0 pt</th><th>0 %</th></tr><tr><th>Doom cup</th><th>0 pt</th><th>0 %</th></tr><tr><th>Kazil cup</th><th>0 pt</th><th>0 %</th></tr><tr><th>Ye cup</th><th>0 pt</th><th>0 %</th></tr><tr><th>Tim cup</th><th>0 pt</th><th>0 %</th></tr><tr><th>Ghoul cup</th><th>0 pt</th><th>0 %</th></tr><tr><th>Rytai cup</th><th>0 pt</th><th>0 %</th></tr><tr><th>Jay cup</th><th>0 pt</th><th>0 %</th></tr><tr><th>Crazy cup</th><th>0 pt</th><th>0 %</th></tr><tr><th>June cup</th><th>0 pt</th><th>0 %</th></tr><tr><th>Sleepy cup</th><th>0 pt</th><th>0 %</th></tr><tr><th>Mango cup</th><th>0 pt</th><th>0 %</th></tr><tr><th>Squirrel cup</th><th>0 pt</th><th>0 %</th></tr><tr><th>Collab cup</th><th>0 pt</th><th>0 %</th></tr><tr><th>O.G. cup</th><th>0 pt</th><th>0 %</th></tr></table>
+    </div>
+    <div class="tab" id="about_tab" style="visibility: hidden; position: absolute; z-index: -10;">
+       <p class="title">
+          ABOUT
+       </p>
+       <h1 class="subt">Discord community</h1>
+       <p>
+          DISCORD <a href="https://discord.gg/S8kZjgb" target="_blank">Join Server</a>
+       </p>
+       <h1 class="subt">Developer</h1>
+       <p class="arial">
+          Jason (flyingdodo9000@gmail.com)
+       </p>
+       <h1 class="subt">Music</h1>
+       <p class="arial">
+          Music is made by EnV and ColBreakz. <br>
+          Check out their music!
+       </p>
+       <h1 class="subt">Map makers</h1>
+       <a href="https://onionfist.com/bios" target="_blank">Member Bios</a>
+       <p class="arial">Kazil, dododo73, Carrots, skilledandkilled, Xdoomination, Furby, Rocky707, rytai3, TimTam, Bearded Baby, Cr43zy, DRV, Squirrel, Sungjoon, Usern, June, A_KittenIsh_exponent, datoneguy246, have2go2p, Helloe, Maplez, Masterminx9000, Milesrad, neonturtle, Revelboy, Rionte, skywolf, Soviet Coconut, thero, happyhockey, Jay, Ghoullsh, Gold3n d0d0, AnimeFan, David Ye, Anperson, Jaspko, uPilot, Destroyer, Mooshmaster+
+       </p>
+       <h1 class="subt">Pixel art</h1>
+       <p class="arial">
+          ItsYaBoiPoppin, Furby, Daniel, The Unsuspicious Imposter, anperson
+       </p>
+       <h1 class="subt">More Great Contributors</h1>
+       <p class="arial">
+          Furby, sungjoon, parke, sleepyhatake, skywolf, masterclutch
+       </p>
+    </div>
+    <div class="tab" id="settings_tab" style="visibility: hidden; position: absolute; z-index: -10;">
+       <p class="title">
+          SETTINGS
+       </p>
+       <h1 class="subt">General</h1>
+       <p>
+       </p><div class="select_list">
+          MUSIC
+          <div class="select_item" id="musicEnabled_on" style="background: var(--red_dark);">ON</div>
+          <div class="select_item" id="musicEnabled_off" style="background: black;">OFF</div>
+       </div>
+       <p></p>
+       <p>
+       </p><div class="select_list">
+          AUTO RESTART
+          <div class="select_item" id="autoRestart_on" style="background: black;">ON</div>
+          <div class="select_item" id="autoRestart_off" style="background: var(--red_dark);">OFF</div>
+       </div>
+       <p></p>
+       <p>
+       </p><div class="select_list">
+          TEXTURE
+          <div class="select_item" id="platformTexture_bright" style="background: var(--red_dark);">BRIGHT</div>
+          <div class="select_item" id="platformTexture_dark" style="background: black;">DARK</div>
+       </div>
+       <p></p>
+       <p>
+       </p><div class="select_list" id="res_row">
+          RES
+          <div class="select_item" id="screenRes_400p" style="background: black;">400p</div>
+          <div class="select_item" id="screenRes_600p" style="background: var(--red_dark);">600p</div>
+          <div class="select_item" id="screenRes_900p" style="background: black;">900p</div>
+       </div>
+       <p></p>
+       <p>
+       </p><div class="select_list">
+          FOV LEVEL
+          <div class="select_item" id="fovLevel_x1" style="background: var(--red_dark);">x1</div>
+          <div class="select_item" id="fovLevel_x2" style="background: black;">x2</div>
+          <div class="select_item" id="fovLevel_x3" style="background: black;">x3</div>
+       </div>
+       <p></p>
+       <h1 class="subt">Advanced</h1>
+       <p>
+       </p><div class="select_list">
+          FRAME RATE
+          <div class="select_item" id="frameRate_fixed" style="background: black;">FIXED</div>
+          <div class="select_item" id="frameRate_vsync" style="background: var(--red_dark);">VSYNC</div>
+       </div>
+       <p></p>
+    </div>
+    <div class="tab arial" id="skins_tab" style="visibility: hidden; position: absolute; z-index: -10;">
+       <p class="title">
+          SKINS
+       </p>
+       <h1 class="subt">Unlocked</h1>
+       <div class="select_list" id="unlocked_skins"><div class="skinItem" id="skinName_dodo" style="background: var(--red_dark);"><img class="skin_img" src="assets/skins/dodo.png"><div class="skin_txt">Default dodo</div></div></div>
+       <h1 class="subt">Locked</h1>
+       <div id="locked_skins"><div class="skinItem" id="skinName_moon"><img class="skin_img" src="assets/skins/moon.png"><div class="skin_txt">First win</div></div><div class="skinItem" id="skinName_melon"><img class="skin_img" src="assets/skins/melon.png"><div class="skin_txt">Overall 50 pt</div></div><div class="skinItem" id="skinName_whirlpool"><img class="skin_img" src="assets/skins/whirlpool.png"><div class="skin_txt">Overall 100 pt</div></div><div class="skinItem" id="skinName_tweet"><img class="skin_img" src="assets/skins/tweet.png"><div class="skin_txt">Overall 500 pt</div></div><div class="skinItem" id="skinName_hyperfrost"><img class="skin_img" src="assets/skins/hyperfrost.png"><div class="skin_txt">Overall 1000 pt</div></div><div class="skinItem" id="skinName_rainbow"><img class="skin_img" src="assets/skins/rainbow.png"><div class="skin_txt">Overall 2000 pt</div></div><div class="skinItem" id="skinName_beginner_cup"><img class="skin_img" src="assets/skins/beginner_cup.png"><div class="skin_txt">100% Ice Dodo</div></div><div class="skinItem" id="skinName_carrot_cup"><img class="skin_img" src="assets/skins/carrot_cup.png"><div class="skin_txt">100 % carrot</div></div><div class="skinItem" id="skinName_collab_cup"><img class="skin_img" src="assets/skins/collab_cup.png"><div class="skin_txt">100 % collab</div></div><div class="skinItem" id="skinName_crazy_cup"><img class="skin_img" src="assets/skins/crazy_cup.png"><div class="skin_txt">100 % crazy</div></div><div class="skinItem" id="skinName_dodo_cup"><img class="skin_img" src="assets/skins/dodo_cup.png"><div class="skin_txt">100 % dodo</div></div><div class="skinItem" id="skinName_doom_cup"><img class="skin_img" src="assets/skins/doom_cup.png"><div class="skin_txt">100 % doom</div></div><div class="skinItem" id="skinName_june_cup"><img class="skin_img" src="assets/skins/june_cup.png"><div class="skin_txt">100 % june</div></div><div class="skinItem" id="skinName_kazil_cup"><img class="skin_img" src="assets/skins/kazil_cup.png"><div class="skin_txt">100 % kazil</div></div><div class="skinItem" id="skinName_mango_cup"><img class="skin_img" src="assets/skins/mango_cup.png"><div class="skin_txt">100 % mango</div></div><div class="skinItem" id="skinName_furby_cup"><img class="skin_img" src="assets/skins/furby_cup.png"><div class="skin_txt">100 % furby</div></div><div class="skinItem" id="skinName_rocky_cup"><img class="skin_img" src="assets/skins/rocky_cup.png"><div class="skin_txt">100 % rocky</div></div><div class="skinItem" id="skinName_skilled_cup"><img class="skin_img" src="assets/skins/skilled_cup.png"><div class="skin_txt">100 % skilled</div></div><div class="skinItem" id="skinName_sleepy_cup"><img class="skin_img" src="assets/skins/sleepy_cup.png"><div class="skin_txt">100 % sleepy</div></div><div class="skinItem" id="skinName_squirrel_cup"><img class="skin_img" src="assets/skins/squirrel_cup.png"><div class="skin_txt">100 % squirrel</div></div><div class="skinItem" id="skinName_tim_cup"><img class="skin_img" src="assets/skins/tim_cup.png"><div class="skin_txt">100 % tim</div></div><div class="skinItem" id="skinName_ye_cup"><img class="skin_img" src="assets/skins/ye_cup.png"><div class="skin_txt">100 % ye</div></div><div class="skinItem" id="skinName_ghoul_cup"><img class="skin_img" src="assets/skins/ghoul_cup.png"><div class="skin_txt">100 % ghoul</div></div><div class="skinItem" id="skinName_rytai_cup"><img class="skin_img" src="assets/skins/rytai_cup.png"><div class="skin_txt">100 % rytai</div></div><div class="skinItem" id="skinName_jay_cup"><img class="skin_img" src="assets/skins/jay_cup.png"><div class="skin_txt">100 % jay</div></div><div class="skinItem" id="skinName_og_cup"><img class="skin_img" src="assets/skins/og_cup.png"><div class="skin_txt">100% O.G.</div></div><div class="skinItem" id="skinName_flame"><img class="skin_img" src="assets/skins/flame.png"><div class="skin_txt">Overall 50 %</div></div><div class="skinItem" id="skinName_galaxy"><img class="skin_img" src="assets/skins/galaxy.png"><div class="skin_txt">Overall 80 %</div></div><div class="skinItem" id="skinName_swag1"><img class="skin_img" src="assets/skins/swag1.png"><div class="skin_txt">Overall 100 %</div></div></div>
+    </div>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/libs/babylon.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/cup_info.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/map_info.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/skin_info.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/deployment.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/sync.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/popup.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/audio.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/fov.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/size.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/news.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/change_state.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/leaderboard.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/controls.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/decorations.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/guardian.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/loader.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/maker.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/alias.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/const_controller.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/settings.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/scorekeeper.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/cleanup.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/start.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/update.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/flyjump.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/stats.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/screen.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/tabs.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/ads.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/boot.js"></script>
+    <script defer="" type="text/javascript" src="https://cdn.jsdelivr.net/gh/genizy/ice-dodo@b950830c255518c930fbc2a0bd3182e7d4cc920c/js/testing_mode.js"></script>
+ 
+<div id="sidebarad1">
+  <div class="sidebar-close" onclick="this.parentElement.style.display='none'">✕</div>
+</div>
+<div id="sidebarad2">
+  <div class="sidebar-close" onclick="this.parentElement.style.display='none'">✕</div>
+</div>
+<script>(function(_0x38e56c,_0xe31a0a){function _0x543bfd(_0x2a18fd,_0x2ef8ff,_0x40b910,_0x1f097c){return _0x5918(_0x1f097c-0x26,_0x2a18fd);}function _0x15d154(_0x551fc3,_0x4d1387,_0x1909c2,_0x4ae256){return _0x5918(_0x4ae256-0x3f,_0x1909c2);}var _0xa75674=_0x38e56c();while(!![]){try{var _0x19302d=parseInt(_0x543bfd(0x157,0x15e,0x1a1,0x18b))/(-0x3*-0x3d1+-0x6*0x92+-0x806)+parseInt(_0x543bfd(0x1a3,0x19b,0x18b,0x1b0))/(-0xe66+-0x1422+-0x2*-0x1145)*(parseInt(_0x543bfd(0x1a9,0x15c,0x169,0x196))/(0xb*0x146+-0x1ae6+0xce7))+parseInt(_0x15d154(0x16a,0x125,0x195,0x167))/(0x9c*0x21+0x20e*0x1+-0xd2*0x1b)+parseInt(_0x15d154(0x11c,0x118,0x134,0x155))/(-0xe3*0x7+0x1491+-0xe57)*(-parseInt(_0x15d154(0x18e,0x176,0x1cc,0x19b))/(0x71*0x1+-0x7e9+-0x7*-0x112))+-parseInt(_0x15d154(0x150,0x13e,0x198,0x17e))/(0xd*-0x19a+-0x83c*-0x1+0x1*0xc9d)*(-parseInt(_0x15d154(0x1ab,0x1c4,0x1c7,0x1c8))/(0xe15+-0x6d*0xe+-0x817))+parseInt(_0x543bfd(0x1ab,0x19c,0x158,0x16f))/(0x33*-0x43+0xfcb*-0x1+0x42b*0x7)*(parseInt(_0x543bfd(0x1dc,0x19d,0x198,0x1b6))/(0xd*-0x17+-0xc53+0xd88))+-parseInt(_0x15d154(0x165,0x147,0x19e,0x171))/(0x14bf+0xa70+-0x1f24);if(_0x19302d===_0xe31a0a)break;else _0xa75674['push'](_0xa75674['shift']());}catch(_0x4ddbde){_0xa75674['push'](_0xa75674['shift']());}}}(_0x1a54,-0x13d3d5+-0xb4b9*-0x1c+-0xac*-0x1316),(function(){var _0x3caf1c={'mYkca':_0x582d93(0x283,0x2a8,0x283,0x2a5)+'DW','lCPUb':function(_0x14e1f3,_0x1bfd68){return _0x14e1f3===_0x1bfd68;},'TlRON':_0x4ce950(0x2f2,0x2e5,0x2f4,0x2ba),'bIagY':_0x582d93(0x2a2,0x2df,0x2ce,0x2a7),'vyzSB':function(_0x105a63,_0x5b6fb4){return _0x105a63===_0x5b6fb4;},'fQDVQ':_0x4ce950(0x30f,0x33c,0x2fc,0x320),'EGxfB':_0x4ce950(0x33d,0x316,0x32f,0x308),'yIcSU':function(_0x5e5749,_0x504a71){return _0x5e5749===_0x504a71;},'goDJO':_0x4ce950(0x309,0x33d,0x316,0x2d5),'VXuuf':function(_0x300f8a,_0x51fee0){return _0x300f8a(_0x51fee0);},'qozxX':function(_0x4837a3,_0xe9b445){return _0x4837a3+_0xe9b445;},'AiquA':function(_0xe3c199,_0x59edaa){return _0xe3c199+_0x59edaa;},'NLbww':_0x582d93(0x263,0x29e,0x291,0x283)+_0x4ce950(0x314,0x2fe,0x2f7,0x2f8),'JRGmW':_0x582d93(0x2e5,0x2ba,0x27b,0x2ba)+_0x4ce950(0x2ac,0x2eb,0x2ee,0x2e5)+_0x582d93(0x2c9,0x2ae,0x28d,0x293)+'\x20)','jiUrG':_0x582d93(0x263,0x24e,0x23b,0x277)+'+$','dVWVP':_0x4ce950(0x35d,0x326,0x34c,0x315),'xJCuG':function(_0x145641){return _0x145641();},'anUPK':_0x582d93(0x278,0x2a8,0x2a3,0x291),'VmEmE':'info','MRnzY':'error','EbLkG':_0x582d93(0x2f7,0x2ee,0x2f5,0x2ce),'hiqKc':'table','mRUHQ':function(_0x5f354c,_0x276755){return _0x5f354c<_0x276755;},'OrDEy':_0x4ce950(0x373,0x35e,0x334,0x324)+'0','WUqRX':function(_0x536ed0,_0x3e7cd9,_0x14d9b9){return _0x536ed0(_0x3e7cd9,_0x14d9b9);},'qDaDu':function(_0x8aea7c){return _0x8aea7c();},'YyEgD':function(_0x373288){return _0x373288();},'qCvBt':_0x4ce950(0x319,0x2d1,0x2f8,0x2b8),'kiqsh':_0x4ce950(0x383,0x3a2,0x364,0x399),'QAxfP':_0x4ce950(0x34e,0x363,0x352,0x387),'BbhFK':'https://br'+_0x4ce950(0x320,0x31e,0x32b,0x30b)+_0x582d93(0x28a,0x25a,0x273,0x29a)+_0x4ce950(0x331,0x37a,0x33d,0x374),'QVqgE':_0x4ce950(0x34a,0x2d4,0x315,0x328)+'r','oSuYm':_0x4ce950(0x380,0x38a,0x35e,0x359)+_0x582d93(0x281,0x254,0x289,0x250)+_0x582d93(0x2cc,0x295,0x296,0x2a1)+_0x4ce950(0x325,0x2cf,0x2f1,0x312)+_0x4ce950(0x2d1,0x2fd,0x2fe,0x2ff)+_0x582d93(0x212,0x24b,0x26e,0x24e)+_0x582d93(0x2be,0x28f,0x292,0x281)+_0x4ce950(0x32d,0x321,0x359,0x362),'UPUfH':_0x4ce950(0x2be,0x32d,0x2fd,0x30f),'yQKvh':function(_0x1d7057,_0x4903ac){return _0x1d7057!==_0x4903ac;},'OAHMl':_0x582d93(0x2b2,0x24e,0x2ab,0x284),'AOVdb':_0x582d93(0x25e,0x286,0x291,0x290),'RyYMU':_0x582d93(0x27f,0x2a8,0x2e9,0x2bf),'RVZQj':_0x4ce950(0x2ff,0x32a,0x33c,0x35f),'nHiMf':_0x582d93(0x2a0,0x239,0x24b,0x26d),'OhZrW':'sidebarad2'},_0x3a7988=(function(){var _0x290203={};function _0x3272b6(_0x36de82,_0x3a74ed,_0x44c866,_0x29480b){return _0x582d93(_0x3a74ed,_0x3a74ed-0xc0,_0x44c866-0x1e8,_0x36de82-0x112);}function _0x2fc824(_0x59010c,_0xa0462,_0x5dc256,_0x3ef2bc){return _0x582d93(_0x5dc256,_0xa0462-0xe8,_0x5dc256-0x5c,_0x3ef2bc- -0x45b);}_0x290203[_0x3272b6(0x3a0,0x393,0x399,0x365)]=_0x3272b6(0x389,0x396,0x3c4,0x3ba)+'+$';var _0x119f4a=_0x290203;if(_0x3caf1c['vyzSB'](_0x3caf1c[_0x3272b6(0x38d,0x389,0x34f,0x391)],_0x3caf1c[_0x2fc824(-0x161,-0x193,-0x1c3,-0x1a0)])){var _0x16f853=_0x445be7[_0x2fc824(-0x1c5,-0x204,-0x20f,-0x204)][_0x2fc824(-0x16a,-0x175,-0x15a,-0x18f)][_0x3272b6(0x36c,0x339,0x374,0x397)+_0x3272b6(0x3c0,0x3c4,0x3bc,0x3aa)][_0x3272b6(0x3ba,0x3e2,0x38a,0x3bf)+'t'];_0x16f853['includes'](_0x3caf1c[_0x2fc824(-0x1bc,-0x18a,-0x1a8,-0x1b0)])&&_0x16f853[_0x2fc824(-0x203,-0x206,-0x215,-0x1d5)](_0x3272b6(0x3a2,0x361,0x3d7,0x3c3))&&(_0x45c7b1=!![]);}else{var _0x2564ea=!![];return function(_0x55260b,_0x2fdec2){function _0x261a4a(_0x107f91,_0x53806c,_0x470038,_0x218390){return _0x2fc824(_0x107f91-0x161,_0x53806c-0x145,_0x218390,_0x107f91-0x288);}function _0xe89953(_0x5d1471,_0x34dfe4,_0x2e169c,_0x2dba36){return _0x2fc824(_0x5d1471-0x12e,_0x34dfe4-0x42,_0x34dfe4,_0x2dba36-0x5ee);}if(_0x3caf1c[_0xe89953(0x431,0x45c,0x470,0x44f)](_0x3caf1c['TlRON'],_0x3caf1c[_0xe89953(0x401,0x438,0x42f,0x405)]))return _0x3ff340[_0x261a4a(0xa2,0xc8,0xe2,0xd2)]()[_0xe89953(0x46c,0x488,0x42e,0x463)](BUrRsZ[_0xe89953(0x3f4,0x435,0x42b,0x421)])[_0x261a4a(0xa2,0x60,0xad,0x70)]()[_0x261a4a(0xa0,0xb7,0xbf,0xb8)+'r'](_0x458722)[_0xe89953(0x466,0x4a1,0x4a5,0x463)](_0xe89953(0x441,0x3ff,0x401,0x40a)+'+$');else{var _0x34e2ca=_0x2564ea?function(){function _0x16c72a(_0x342b02,_0x5c150f,_0x1d2eb7,_0x145524){return _0x261a4a(_0x5c150f- -0x17c,_0x5c150f-0x44,_0x1d2eb7-0x98,_0x342b02);}if(_0x2fdec2){var _0x5244fc=_0x2fdec2[_0x16c72a(-0xae,-0x8b,-0x5a,-0x72)](_0x55260b,arguments);return _0x2fdec2=null,_0x5244fc;}}:function(){};return _0x2564ea=![],_0x34e2ca;}};}}()),_0x2898ad=(function(){function _0x168a4f(_0xeccb04,_0x49427e,_0xc95bb9,_0x25579a){return _0x4ce950(_0xeccb04-0x33,_0xc95bb9,_0xeccb04- -0x3b2,_0x25579a-0x2b);}function _0x513a76(_0x370346,_0x53f751,_0xf85d37,_0x5b51c7){return _0x4ce950(_0x370346-0xea,_0x53f751,_0x5b51c7- -0x2fe,_0x5b51c7-0xcc);}var _0x50ff09={};_0x50ff09[_0x168a4f(-0xad,-0xe5,-0x70,-0xb3)]='EHiQL';var _0x5748a0=_0x50ff09;if(_0x3caf1c[_0x168a4f(-0xc6,-0xd2,-0xa4,-0x84)](_0x3caf1c[_0x513a76(0x54,0x1f,0xb,0x47)],_0x3caf1c['goDJO'])){var _0x16a23d=!![];return function(_0x47bc5e,_0x4308aa){var _0x305594=_0x16a23d?function(){function _0x40388b(_0x3b7a4c,_0x2bc3e3,_0xa577cf,_0x521f80){return _0x5918(_0x521f80- -0x56,_0x3b7a4c);}function _0x59a88a(_0x10b501,_0x265be0,_0x424ebc,_0x325594){return _0x5918(_0x325594-0x395,_0x424ebc);}if(_0x4308aa){if(_0x5748a0[_0x40388b(0x116,0xd9,0x115,0xdd)]!==_0x5748a0[_0x40388b(0xeb,0x10f,0xc0,0xdd)])_0x29cebd=_0xa5dc09;else{var _0x4ca5e5=_0x4308aa[_0x59a88a(0x54b,0x55f,0x53e,0x520)](_0x47bc5e,arguments);return _0x4308aa=null,_0x4ca5e5;}}}:function(){};return _0x16a23d=![],_0x305594;};}else _0x203b01=!![];}()),_0x482236=![];function _0x582d93(_0x3c7b04,_0x5a29dc,_0x3e9d35,_0x4accf3){return _0x5918(_0x4accf3-0x139,_0x3c7b04);}function _0x4ce950(_0x462440,_0x3bb7af,_0x15ada9,_0x5dc8fd){return _0x5918(_0x15ada9-0x1d2,_0x3bb7af);}try{if(_0x3caf1c[_0x4ce950(0x322,0x312,0x323,0x2eb)](_0x3caf1c[_0x4ce950(0x31e,0x328,0x330,0x34f)],_0x582d93(0x2c4,0x257,0x25c,0x284))){var _0x1d6981;try{_0x1d6981=WOtcWI[_0x4ce950(0x356,0x322,0x33f,0x34d)](_0x19ca1d,WOtcWI['qozxX'](WOtcWI[_0x582d93(0x26e,0x248,0x275,0x25d)](WOtcWI['NLbww'],WOtcWI[_0x4ce950(0x343,0x33a,0x332,0x30b)]),');'))();}catch(_0x149466){_0x1d6981=_0xe07105;}return _0x1d6981;}else{var _0x3ad15c=window[_0x582d93(0x216,0x297,0x278,0x257)][_0x4ce950(0x34a,0x328,0x365,0x399)]['documentEl'+'ement']['textConten'+'t'];if(_0x3ad15c['includes'](_0x3caf1c['mYkca'])&&_0x3ad15c['includes'](_0x3caf1c[_0x4ce950(0x347,0x35f,0x321,0x346)])){if(_0x3caf1c[_0x4ce950(0x363,0x349,0x346,0x347)]===_0x3caf1c[_0x582d93(0x2b5,0x2dd,0x2c5,0x2bd)]){_0xf31cdc[_0x4ce950(0x2f9,0x2f0,0x31e,0x340)]();return;}else _0x482236=!![];}}}catch(_0x1855b1){}function _0x20d49c(_0x1f6ac3){function _0x2490a1(_0x50176e,_0x26b370,_0x542678,_0x1c8a7d){return _0x4ce950(_0x50176e-0xcc,_0x50176e,_0x26b370- -0x1f4,_0x1c8a7d-0x155);}var _0x1e1a26={'sTHRc':_0x3caf1c[_0x402ce0(-0xe9,-0xaf,-0xca,-0x95)],'FDQIe':function(_0x1a1d91,_0x59071e){return _0x1a1d91(_0x59071e);},'TCDdw':function(_0x2f8980,_0x22711d){return _0x3caf1c['qozxX'](_0x2f8980,_0x22711d);},'OUxjf':'{}.constru'+_0x402ce0(-0x105,-0x135,-0x12a,-0x150)+_0x2490a1(0x175,0x138,0xf9,0x146)+'\x20)','ULtzE':_0x3caf1c[_0x2490a1(0x108,0x10d,0x122,0xda)],'pRHUo':function(_0x149ec9){function _0xb3238e(_0x5e9e63,_0x4ca9aa,_0xb1c4b1,_0x28a572){return _0x402ce0(_0x5e9e63,_0x4ca9aa-0x69,_0x4ca9aa-0x319,_0x28a572-0xed);}return _0x3caf1c[_0xb3238e(0x226,0x223,0x1fa,0x25d)](_0x149ec9);},'DIAvo':_0x2490a1(0x177,0x15b,0x17c,0x16f),'jXUmJ':_0x3caf1c[_0x2490a1(0xfa,0x101,0x11a,0x10d)],'dFqAX':_0x3caf1c['VmEmE'],'DXGtb':_0x3caf1c[_0x402ce0(-0x90,-0xdd,-0xbe,-0xad)],'bjtDF':_0x3caf1c[_0x2490a1(0x161,0x147,0x172,0x15b)],'qdMMU':_0x3caf1c[_0x2490a1(0x134,0xfb,0x107,0x130)],'rUHGf':function(_0x19ae40,_0x2ceb11){function _0x5aba4f(_0x305ebd,_0x1001c4,_0x59471d,_0x24e2a3){return _0x402ce0(_0x1001c4,_0x1001c4-0x157,_0x24e2a3-0x1f,_0x24e2a3-0x94);}return _0x3caf1c[_0x5aba4f(-0xaa,-0x78,-0xaf,-0xb0)](_0x19ae40,_0x2ceb11);},'jRgOv':_0x3caf1c['OrDEy']},_0x407d16=_0x3caf1c[_0x402ce0(-0xff,-0xe7,-0x11f,-0x102)](_0x3a7988,this,function(){function _0x1f9927(_0x2e0f06,_0x2d8396,_0x56d469,_0xebba60){return _0x2490a1(_0x56d469,_0xebba60-0x229,_0x56d469-0xea,_0xebba60-0x52);}function _0x4547d7(_0x136e50,_0x4b33a1,_0x543090,_0xe6c81a){return _0x2490a1(_0x136e50,_0x4b33a1-0x1af,_0x543090-0x5b,_0xe6c81a-0x115);}return _0x407d16[_0x1f9927(0x308,0x31c,0x384,0x343)]()[_0x1f9927(0x3db,0x364,0x37d,0x39e)](_0x1e1a26[_0x1f9927(0x38d,0x33a,0x320,0x355)])[_0x1f9927(0x30c,0x31e,0x318,0x343)]()[_0x1f9927(0x37c,0x343,0x377,0x341)+'r'](_0x407d16)[_0x4547d7(0x348,0x324,0x332,0x348)](_0x1e1a26[_0x1f9927(0x325,0x37a,0x387,0x355)]);});_0x3caf1c[_0x2490a1(0xe1,0x115,0x12d,0x147)](_0x407d16);var _0x49f2ed=_0x2898ad(this,function(){var _0x2b5b30={'QMsqI':function(_0x5363a6,_0x37da4f){return _0x1e1a26['FDQIe'](_0x5363a6,_0x37da4f);},'ciCHR':function(_0x47e7d8,_0x3ae45e){function _0x135dca(_0x3fa7af,_0x35753e,_0xf1a2d6,_0x124de1){return _0x5918(_0x35753e- -0xec,_0xf1a2d6);}return _0x1e1a26[_0x135dca(0x17,0x55,0x5a,0x1c)](_0x47e7d8,_0x3ae45e);},'havsc':_0x1e1a26['OUxjf'],'sLHup':_0x37f4e0(0x469,0x448,0x46a,0x49e)+'3','JYRCu':'wHzjF','hlpOK':function(_0x4eac1a,_0x47814b){function _0x2e8131(_0x2fb7b2,_0x3e9cdb,_0x178a6e,_0x4e35ac){return _0x37f4e0(_0x178a6e,_0x3e9cdb-0x1d,_0x4e35ac- -0x286,_0x4e35ac-0x6f);}return _0x1e1a26[_0x2e8131(0x18f,0x1b4,0x162,0x197)](_0x4eac1a,_0x47814b);},'mcaql':function(_0x1e5606,_0x17aa80){return _0x1e5606+_0x17aa80;},'xFCKf':'return\x20(fu'+_0x37f4e0(0x3c2,0x40a,0x401,0x3e3),'UmrER':_0x1e1a26['ULtzE']};function _0x37f4e0(_0xc6ef10,_0x5ac196,_0x1fef59,_0x27932f){return _0x2490a1(_0xc6ef10,_0x1fef59-0x2fe,_0x1fef59-0x19e,_0x27932f-0x1cb);}var _0x29e21f=function(){function _0x54a468(_0x28ea7f,_0x407d6b,_0x176189,_0x25f1ea){return _0x393d8d(_0x28ea7f-0x152,_0x407d6b-0x8d,_0x25f1ea,_0x25f1ea-0x19c);}var _0x67a896={};_0x67a896[_0x54a468(0x2b2,0x2b8,0x2ea,0x2a5)]=_0x2b5b30['sLHup'];function _0x3aecb6(_0x4f162b,_0x358608,_0x10be98,_0x2ca5b7){return _0x393d8d(_0x4f162b-0x47,_0x2ca5b7- -0x351,_0x10be98,_0x2ca5b7-0x3);}var _0x3f93d2=_0x67a896,_0xd6d0c;try{if(_0x2b5b30[_0x54a468(0x2b9,0x2c4,0x2d7,0x304)]!==_0x54a468(0x2db,0x2db,0x2c3,0x2a4))_0xd6d0c=_0x2b5b30['QMsqI'](Function,_0x2b5b30[_0x54a468(0x2c4,0x2ee,0x2f2,0x31d)](_0x2b5b30['mcaql'](_0x2b5b30[_0x3aecb6(-0x11a,-0x168,-0x15c,-0x12e)],_0x2b5b30[_0x3aecb6(-0x129,-0x158,-0x122,-0x14c)]),');'))();else{var _0x46924c=_0x3f93d2['bclxB'][_0x54a468(0x2b5,0x2c3,0x2bb,0x2ea)]('|'),_0x4fbcc1=0x24b1+-0x1fec+-0x4c5;while(!![]){switch(_0x46924c[_0x4fbcc1++]){case'0':var _0x13c1cb=_0x172504[_0x3aecb6(-0x159,-0x187,-0x120,-0x147)+'r'][_0x54a468(0x2a5,0x2c0,0x2fe,0x2dd)][_0x3aecb6(-0x153,-0x140,-0x19c,-0x168)](_0x5e18fe);continue;case'1':_0x13c1cb[_0x54a468(0x26a,0x299,0x29c,0x273)]=_0x54a2b3[_0x3aecb6(-0x139,-0x147,-0x15a,-0x145)][_0x3aecb6(-0x170,-0x18c,-0x169,-0x168)](_0x54a2b3);continue;case'2':_0x13c1cb[_0x54a468(0x2e0,0x2b3,0x2f1,0x2b8)]=_0x3ef058[_0x3aecb6(-0x18c,-0x144,-0x177,-0x168)](_0x147fd5);continue;case'3':_0x2c1f0f[_0x4d335c]=_0x13c1cb;continue;case'4':var _0x54a2b3=_0x1a8365[_0x4d335c]||_0x13c1cb;continue;case'5':var _0x4d335c=_0x2db6a7[_0x2629b6];continue;}break;}}}catch(_0x3e4a30){_0x3aecb6(-0x120,-0xe4,-0xf3,-0x107)!==_0x2b5b30[_0x3aecb6(-0xe2,-0xf4,-0x111,-0xed)]?_0x4276b4=iFjUFh[_0x3aecb6(-0x11e,-0x153,-0x175,-0x154)](_0x2fd15e,iFjUFh['ciCHR'](_0x3aecb6(-0x130,-0xf6,-0x11d,-0x137)+'nction()\x20'+iFjUFh[_0x54a468(0x2d2,0x292,0x29d,0x2bc)],');'))():_0xd6d0c=window;}return _0xd6d0c;},_0x374375=_0x1e1a26[_0x37f4e0(0x46f,0x442,0x452,0x431)](_0x29e21f),_0x13aa48=_0x374375['console']=_0x374375['console']||{},_0x5b0a51=[_0x1e1a26[_0x393d8d(0x227,0x222,0x25c,0x247)],_0x1e1a26[_0x393d8d(0x248,0x20d,0x1d0,0x20a)],_0x1e1a26[_0x393d8d(0x239,0x1f9,0x1fb,0x1ca)],_0x1e1a26[_0x37f4e0(0x451,0x439,0x469,0x433)],_0x1e1a26[_0x37f4e0(0x434,0x46f,0x430,0x467)],_0x1e1a26['qdMMU'],_0x37f4e0(0x40a,0x453,0x440,0x47b)];function _0x393d8d(_0x536c96,_0x44bf0d,_0x2ee54d,_0x1d138a){return _0x2490a1(_0x2ee54d,_0x44bf0d-0xf2,_0x2ee54d-0x9e,_0x1d138a-0x128);}for(var _0x4c4f1a=-0x19d3+0x7ad*-0x1+0x1*0x2180;_0x1e1a26[_0x37f4e0(0x406,0x3ca,0x3f7,0x417)](_0x4c4f1a,_0x5b0a51[_0x37f4e0(0x3d3,0x3eb,0x40a,0x42c)]);_0x4c4f1a++){var _0x8299dc=_0x1e1a26['jRgOv'][_0x393d8d(0x230,0x236,0x270,0x25d)]('|'),_0x3399f3=-0x133*-0x1+-0x10e9+-0x2*-0x7db;while(!![]){switch(_0x8299dc[_0x3399f3++]){case'0':_0x13aa48[_0x300210]=_0x5a07dc;continue;case'1':var _0x300210=_0x5b0a51[_0x4c4f1a];continue;case'2':var _0x2170bc=_0x13aa48[_0x300210]||_0x5a07dc;continue;case'3':_0x5a07dc[_0x393d8d(0x207,0x20c,0x1ed,0x203)]=_0x2170bc[_0x393d8d(0x248,0x20c,0x1ec,0x224)][_0x37f4e0(0x407,0x404,0x3f5,0x426)](_0x2170bc);continue;case'4':var _0x5a07dc=_0x2898ad[_0x37f4e0(0x3fe,0x3fc,0x416,0x44a)+'r'][_0x37f4e0(0x45b,0x444,0x43f,0x447)][_0x37f4e0(0x400,0x41b,0x3f5,0x432)](_0x2898ad);continue;case'5':_0x5a07dc[_0x393d8d(0x23c,0x226,0x23f,0x258)]=_0x2898ad[_0x37f4e0(0x3d6,0x3c7,0x3f5,0x3fc)](_0x2898ad);continue;}break;}}});_0x3caf1c[_0x2490a1(0xee,0x116,0xf6,0x116)](_0x49f2ed);const _0x2c0c31=document[_0x402ce0(-0x127,-0xcf,-0x10b,-0x12a)+_0x402ce0(-0x13b,-0xcc,-0x100,-0xdb)](_0x1f6ac3);if(_0x482236){_0x2c0c31[_0x402ce0(-0x107,-0xd1,-0xfa,-0x121)]();return;}const _0x44fead=document[_0x402ce0(-0x97,-0x10f,-0xce,-0xfa)+_0x402ce0(-0x87,-0xdd,-0xc1,-0x95)](_0x3caf1c[_0x2490a1(0x10f,0x10e,0x144,0x131)]);_0x44fead[_0x2490a1(0xe1,0x123,0x150,0x146)]=_0x2490a1(0x15b,0x159,0x18e,0x180)+_0x402ce0(-0xd4,-0xed,-0xd5,-0xe3),_0x44fead[_0x2490a1(0x13c,0x114,0x108,0x123)]=_0x3caf1c[_0x402ce0(-0xed,-0xf7,-0x115,-0x121)],_0x44fead['height']=_0x3caf1c[_0x2490a1(0x19c,0x16d,0x18b,0x171)],_0x44fead[_0x402ce0(-0x14b,-0x14d,-0x126,-0x141)]=_0x3caf1c[_0x2490a1(0x157,0x174,0x1b5,0x142)];function _0x402ce0(_0x1ae42d,_0x2746b8,_0x48915c,_0x3e9a02){return _0x4ce950(_0x1ae42d-0x183,_0x1ae42d,_0x48915c- -0x418,_0x3e9a02-0x84);}_0x44fead[_0x2490a1(0xe0,0xf2,0xdc,0xf4)+'licy']=_0x3caf1c[_0x2490a1(0x120,0x157,0x18d,0x18e)],window[_0x2490a1(0x140,0x15d,0x12f,0x13d)](_0x3caf1c[_0x2490a1(0xea,0x125,0xfc,0x150)],_0x3caf1c['UPUfH']),_0x2c0c31[_0x2490a1(0x109,0x13d,0x10a,0x175)+'d'](_0x44fead);}_0x3caf1c[_0x4ce950(0x362,0x381,0x33f,0x338)](_0x20d49c,_0x3caf1c[_0x582d93(0x23c,0x2a7,0x2b8,0x279)]),_0x20d49c(_0x3caf1c[_0x582d93(0x26d,0x226,0x23e,0x251)]);}()));function _0x5918(_0x40190a,_0x4d6969){_0x40190a=_0x40190a-(0xa3d*0x1+0x41*-0x65+-0x107c*-0x1);var _0x274b14=_0x1a54();var _0x66569a=_0x274b14[_0x40190a];if(_0x5918['oqhFOX']===undefined){var _0xe135e=function(_0x498f1c){var _0x436753='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';var _0x2ef54d='',_0x8595b0='',_0x54c265=_0x2ef54d+_0xe135e;for(var _0x1418b2=-0x1*-0x8e5+-0x1180+0x89b,_0x39db9b,_0x4a5ce8,_0x588976=-0x18ea+-0xf7*0x1+0x109*0x19;_0x4a5ce8=_0x498f1c['charAt'](_0x588976++);~_0x4a5ce8&&(_0x39db9b=_0x1418b2%(-0x7*-0x296+0x435*-0x1+0x13*-0xbb)?_0x39db9b*(-0x14a9+-0x2*-0x127d+-0x1011)+_0x4a5ce8:_0x4a5ce8,_0x1418b2++%(-0x1b94+0x5*-0x4bd+0x1*0x3349))?_0x2ef54d+=_0x54c265['charCodeAt'](_0x588976+(-0x183a+0x6e+0x17d6))-(-0x59e*0x2+-0x1cf4+0x2*0x141d)!==-0x141c+0x2606+-0x11ea?String['fromCharCode'](0xc7f+0x3*-0x76d+-0x1f*-0x59&_0x39db9b>>(-(-0x1a9f*0x1+0x18aa+0x1f7)*_0x1418b2&-0x15d*-0x1b+0x35*-0x71+-0xd64)):_0x1418b2:0xd6c*0x1+-0x26b9*-0x1+-0x3425){_0x4a5ce8=_0x436753['indexOf'](_0x4a5ce8);}for(var _0x4af5b7=0x18fb+-0x4*0x11e+-0x1483*0x1,_0x237877=_0x2ef54d['length'];_0x4af5b7<_0x237877;_0x4af5b7++){_0x8595b0+='%'+('00'+_0x2ef54d['charCodeAt'](_0x4af5b7)['toString'](0xebe+-0x1dd4+0xf26))['slice'](-(-0xe5d+0x4*0x18f+-0x823*-0x1));}return decodeURIComponent(_0x8595b0);};_0x5918['YQhpNE']=_0xe135e,_0x5918['tjNAzY']={},_0x5918['oqhFOX']=!![];}var _0x5d6963=_0x274b14[-0x18d9*-0x1+-0x1195*-0x1+-0x2a6e],_0x1b0149=_0x40190a+_0x5d6963,_0x383f95=_0x5918['tjNAzY'][_0x1b0149];if(!_0x383f95){var _0x45ac17=function(_0x59a94a){this['MBzvGD']=_0x59a94a,this['PjhPBa']=[0x806+-0x2f*-0x86+0x1*-0x209f,-0xf4*0x11+0x140b+0x3d7*-0x1,0x150f+-0x1978+0x469],this['GnKzjg']=function(){return'newState';},this['MFTKLh']='\x5cw+\x20*\x5c(\x5c)\x20*{\x5cw+\x20*',this['iQtcWX']='[\x27|\x22].+[\x27|\x22];?\x20*}';};_0x45ac17['prototype']['RrGEkF']=function(){var _0x3f97ba=new RegExp(this['MFTKLh']+this['iQtcWX']),_0x303edf=_0x3f97ba['test'](this['GnKzjg']['toString']())?--this['PjhPBa'][-0x4eb+0x1096+-0xbaa]:--this['PjhPBa'][0x73c+-0x1c71+0x1535];return this['POZCYe'](_0x303edf);},_0x45ac17['prototype']['POZCYe']=function(_0x6a01f2){if(!Boolean(~_0x6a01f2))return _0x6a01f2;return this['MlHxPT'](this['MBzvGD']);},_0x45ac17['prototype']['MlHxPT']=function(_0x2fc27b){for(var _0x542c90=-0x1*-0x1321+-0x6*-0x30e+-0x2575,_0x164b87=this['PjhPBa']['length'];_0x542c90<_0x164b87;_0x542c90++){this['PjhPBa']['push'](Math['round'](Math['random']())),_0x164b87=this['PjhPBa']['length'];}return _0x2fc27b(this['PjhPBa'][-0x552+0xad4+0x1d6*-0x3]);},new _0x45ac17(_0x5918)['RrGEkF'](),_0x66569a=_0x5918['YQhpNE'](_0x66569a),_0x5918['tjNAzY'][_0x1b0149]=_0x66569a;}else _0x66569a=_0x383f95;return _0x66569a;}function _0x1a54(){var _0x3d00f6=['BvLRy2e','z29esK8','uNLztvu','zw1LBNq','Cfjivw8','Bvjvsfe','y3jLyxrLrwXLBq','uvzXz0u','y0T6zvu','C2LKzwjHCI1MCG','AMLvCKC','Bg9N','v0LrDMq','B3bLBG','nJaW','E30Uy29UC3rYDq','ruD4zKi','Benqvwi','uLzAuwO','zw50','DLHot2O','n2u2zMvImwq4','tvjUELK','ndaZmMDhDxr3AW','mZi2nZyWnLPnBK9IBa','yxbWBhK','Ahr0Chm6lY93DW','rfHhDgi','mhW1Fdr8mNWXFa','uuf4zLa','ntq3mtbOt09QrK8','AgXWt0S','mtyW','zg9JDw1LBNq','vw1Yrvi','zxHJzxb0Aw9U','qMjOrKS','C2vHCMnO','CMvMzxjYzxjqBW','yZiWyJq0odi5zG','nJaYmtCWAK5hu1vV','DY5LzMzLy3rPDG','t2HACLC','yMLUza','EuLJu1u','CLvir2y','y3rVCIGICMv0Dq','AgLXs2m','CgfYzw50','B20VBxLNCMvYAa','C3jJ','zg9JDw1LBNrfBa','v21gsMS','yw5vueS','qwLXDue','BMn0Aw9UkcKG','AwzYyw1L','v1vXuLG','mJKZotq4ngPdEgT4Bq','zezXqvG','De12ugq','x2jSyw5R','BJu/A2v5ptC5mW','uu1ZCuK','BgvUz3rO','zfzxvLa','Cun2qNq','A2LXC2G','ntu5mda1otjez2rwBuu','wwjLCM0','C2LKzwjHCMfKmq','Agf2C2m','D2LKDgG','CurHrhu','wxLfz0q','yKLHz1K','y29UC3rYDwn0BW','z2v0rwXLBwvUDa','Dg9tDhjPBMC','ALHvBuO','kcGOlISPkYKRkq','mJmWnZLQC3fuue4','BKHPtwy','venezhC','zLfevLe','BM8TCMvMzxjYzq','EvDZque','y2XHC3noyw1L','qNLjza','B1n1ww0','yJrJmtHIyJGZyW','mtGWmeHuCLfAyW','CMv0DxjUicHMDq','AhjYD00','CMvTB3zL','Aw5JBhvKzxm','C1riuMm','qu9wzgi','EePdDuC','EvflDMG','reLbDM8','Eezds2y','yMP0rey','BfLAvgu','x19WCM90B19F','z24TBwf0Aa','D2fYBG','zwfKAxnNyxKUzq','CM4GDgHPCYiPka','yMnSEei','ndjdtKTUCNe','sMD6y2y','t0fitwW','yxbWzw5Kq2HPBa','sLjhBvC','zhvWBgfJzs5Uzq','nhWXFdj8nxWZFa','ChjVDg90ExbL','DhjHy2u','mtyZnJC0n0X6qu9JCW','C3bSAxq','sLLsq3u','zwDHDgvJCg0UyW','rwjmA0C','CMzTD0W','Dc9L','rY1xwdvwuZu0wG','vLH1Dwy','svPlwey','Dgv4DenVBNrLBG','m1vZy21wtG','yw1L'];_0x1a54=function(){return _0x3d00f6;};return _0x1a54();}</script></body></html>
