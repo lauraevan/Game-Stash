@@ -114,6 +114,6 @@ jobs:
           set -euo pipefail
           git config user.name "Game Stash Importer"
           git config user.email "actions@users.noreply.github.com"
-          git add games.json Games "Game Artwork"
+          git add --sparse games.json Games "Game Artwork"
           git commit -m "Flatten imported games into shared folders"
           git push origin HEAD:main
