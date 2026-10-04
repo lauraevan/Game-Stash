@@ -32,7 +32,7 @@ jobs:
         run: |
           set -euo pipefail
           git clone --depth=1 --filter=blob:none --sparse https://github.com/GoatTech-42/NEBULACDN.git /tmp/nebula
-          git -C /tmp/nebula sparse-checkout set games games.json
+          git -C /tmp/nebula sparse-checkout set --no-cone '/games/' '/games.json'
           git -C /tmp/nebula checkout main
 
       - name: Prepare payload and merge catalog
