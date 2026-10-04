@@ -19,7 +19,15 @@ jobs:
       - name: Checkout Game Stash
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            games.json
+            catalog
+            .github
+            Games/Zones
+            Game Artwork/Zones
 
       - name: Fetch source repos
         run: |
