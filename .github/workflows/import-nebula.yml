@@ -1,0 +1,259 @@
+name: Import NEBULA game batch
+
+on:
+  push:
+    paths:
+      - ".github/workflows/import-nebula.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout Game Stash metadata only
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            games.json
+            catalog
+            .github/workflows/import-nebula.yml
+
+      - name: Fetch NEBULA source
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --depth=1 --filter=blob:none --sparse https://github.com/GoatTech-42/NEBULACDN.git /tmp/nebula
+          git -C /tmp/nebula sparse-checkout set games games.json
+          git -C /tmp/nebula checkout main
+
+      - name: Prepare payload and merge catalog
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p Games catalog
+          cp -a /tmp/nebula/games/. Games/
+
+          python3 - <<'PY'
+          import json
+          import os
+          import subprocess
+
+          with open("/tmp/nebula/games.json", "r", encoding="utf-8") as f:
+              src = json.load(f)
+
+          with open("games.json", "r", encoding="utf-8") as f:
+              existing = json.load(f)
+
+          source_games = src.get("games", [])
+          imported = []
+
+          for game in source_games:
+              rel = str(game.get("file", ""))
+              if rel.startswith("games/"):
+                  rel = rel[len("games/"):]
+
+              local_path = os.path.join("Games", rel).replace(os.sep, "/")
+              if not os.path.isfile(local_path):
+                  raise SystemExit(f"Missing NEBULA payload for {game.get('name')}: {local_path}")
+
+              item = {
+                  "id": f"nebula-{game['id']}",
+                  "name": game["name"],
+                  "gameUrl": local_path,
+                  "source": "GoatTech-42/NEBULACDN",
+                  "slug": game.get("slug"),
+                  "category": game.get("category"),
+                  "tags": game.get("tags", []),
+                  "description": game.get("description", ""),
+                  "size": game.get("size"),
+                  "hash": game.get("hash"),
+              }
+              imported.append(item)
+
+          # Idempotent re-run: replace an earlier NEBULA import instead of duplicating it.
+          existing = [
+              g for g in existing
+              if g.get("source") != "GoatTech-42/NEBULACDN"
+          ]
+          merged = existing + imported
+
+          with open("games.json", "w", encoding="utf-8") as f:
+              json.dump(merged, f, indent=2, ensure_ascii=False)
+              f.write("\n")
+
+          source_commit = subprocess.check_output(
+              ["git", "-C", "/tmp/nebula", "rev-parse", "HEAD"],
+              text=True
+          ).strip()
+
+          payload_count = 0
+          payload_bytes = 0
+          for base, _, names in os.walk("Games"):
+              for name in names:
+                  path = os.path.join(base, name)
+                  if os.path.isfile(path):
+                      payload_count += 1
+                      payload_bytes += os.path.getsize(path)
+
+          manifest = {
+              "source": "GoatTech-42/NEBULACDN",
+              "sourceCommit": source_commit,
+              "catalogGames": len(imported),
+              "sourceStats": src.get("stats", {}),
+              "copiedPayloadFiles": payload_count,
+              "copiedPayloadBytes": payload_bytes,
+              "note": "Game payloads are copied into the shared Games root; supporting assets retain their relative subdirectories."
+          }
+
+          with open("catalog/nebula-manifest.json", "w", encoding="utf-8") as f:
+              json.dump(manifest, f, indent=2, ensure_ascii=False)
+              f.write("\n")
+
+          print(f"Prepared {len(imported)} catalog entries.")
+          PY
+
+      - name: Commit catalog metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "Game Stash Importer"
+          git config user.email "actions@users.noreply.github.com"
+
+          git add games.json catalog/nebula-manifest.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Add NEBULA game catalog"
+            git push origin HEAD:main
+          fi
+
+      - name: Commit NEBULA payload in chunks
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 - <<'PY' > /tmp/nebula-batches.txt
+          import os
+
+          files = []
+          source_root = "/tmp/nebula/games"
+
+          for base, dirs, names in os.walk(source_root):
+              dirs.sort()
+              names.sort()
+              for name in names:
+                  src = os.path.join(base, name)
+                  if not os.path.isfile(src):
+                      continue
+                  rel = os.path.relpath(src, source_root)
+                  dest = os.path.join("Games", rel)
+                  files.append((dest, os.path.getsize(src)))
+
+          files.sort()
+
+          # Keep each individual push comfortably below GitHub's push limits.
+          limit = 140 * 1024 * 1024
+          batch = []
+          total = 0
+          number = 1
+
+          for path, size in files:
+              if batch and total + size > limit:
+                  print(f"__BATCH__ {number}")
+                  for p in batch:
+                      print(p)
+                  number += 1
+                  batch = []
+                  total = 0
+
+              batch.append(path)
+              total += size
+
+          if batch:
+              print(f"__BATCH__ {number}")
+              for p in batch:
+                  print(p)
+          PY
+
+          batch_no=0
+          batch_file=/tmp/current-nebula-batch.txt
+          : > "$batch_file"
+
+          flush_batch() {
+            if [ "$batch_no" -eq 0 ] || [ ! -s "$batch_file" ]; then
+              return
+            fi
+
+            while IFS= read -r file; do
+              git add --sparse -- "$file"
+            done < "$batch_file"
+
+            if ! git diff --cached --quiet; then
+              git commit -m "Import NEBULA payload batch $batch_no"
+              git push origin HEAD:main
+            fi
+
+            : > "$batch_file"
+          }
+
+          while IFS= read -r line; do
+            if [[ "$line" == __BATCH__* ]]; then
+              flush_batch
+              batch_no="${line#__BATCH__ }"
+            else
+              printf '%s\n' "$line" >> "$batch_file"
+            fi
+          done < /tmp/nebula-batches.txt
+
+          flush_batch
+
+      - name: Verify NEBULA import
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          import os
+
+          with open("games.json", "r", encoding="utf-8") as f:
+              games = json.load(f)
+
+          imported = [g for g in games if g.get("source") == "GoatTech-42/NEBULACDN"]
+
+          with open("/tmp/nebula/games.json", "r", encoding="utf-8") as f:
+              source_catalog = json.load(f)
+
+          expected = len(source_catalog.get("games", []))
+          if len(imported) != expected:
+              raise SystemExit(f"Expected {expected} NEBULA catalog entries, got {len(imported)}")
+
+          missing = []
+          for game in imported:
+              path = game.get("gameUrl", "")
+              if not os.path.isfile(path):
+                  missing.append(path)
+
+          source_files = []
+          for base, _, names in os.walk("/tmp/nebula/games"):
+              for name in names:
+                  src = os.path.join(base, name)
+                  if os.path.isfile(src):
+                      rel = os.path.relpath(src, "/tmp/nebula/games")
+                      source_files.append(os.path.join("Games", rel))
+
+          for path in source_files:
+              if not os.path.isfile(path):
+                  missing.append(path)
+
+          if missing:
+              raise SystemExit("Missing imported files:\n" + "\n".join(missing[:100]))
+
+          print(f"Verified {len(imported)} NEBULA games and {len(source_files)} total payload/support files.")
+          PY
