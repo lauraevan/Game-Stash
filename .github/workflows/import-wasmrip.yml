@@ -1,0 +1,186 @@
+name: Import wasm.rip game batch
+
+on:
+  push:
+    paths:
+      - ".github/workflows/import-wasmrip.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout Game Stash
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Clone source batch
+        run: |
+          git clone --depth=1 https://github.com/wasmdotrip/wasm.rip.git /tmp/wasm-rip
+
+      - name: Prepare Games and artwork
+        run: |
+          mkdir -p "Games" "Game Artwork"
+          cp -a /tmp/wasm-rip/files/. "Games/"
+
+          python3 - <<'PY'
+          import json
+          import os
+          import shutil
+
+          src = "/tmp/wasm-rip"
+          with open(os.path.join(src, "games.json"), "r", encoding="utf-8") as f:
+              games = json.load(f)
+
+          for game in games:
+              game_url = game.get("gameUrl", "")
+              image_url = game.get("imageUrl", "")
+
+              if game_url.startswith("files/"):
+                  game["gameUrl"] = "Games/" + game_url[len("files/"):]
+
+              if image_url.startswith("img/"):
+                  rel = image_url[len("img/"):]
+                  source_art = os.path.join(src, "img", rel)
+                  dest_art = os.path.join("Game Artwork", rel)
+                  if os.path.isfile(source_art):
+                      os.makedirs(os.path.dirname(dest_art), exist_ok=True)
+                      shutil.copy2(source_art, dest_art)
+                      game["imageUrl"] = "Game Artwork/" + rel
+
+          with open("games.json", "w", encoding="utf-8") as f:
+              json.dump(games, f, indent=2, ensure_ascii=False)
+              f.write("\n")
+
+          top_level = sorted(
+              name for name in os.listdir(os.path.join(src, "files"))
+              if name != ".DS_Store"
+          )
+          manifest = {
+              "source": "wasmdotrip/wasm.rip",
+              "gameEntries": len(games),
+              "topLevelPayloads": top_level,
+              "payloadCount": len(top_level)
+          }
+          with open("source-manifest.json", "w", encoding="utf-8") as f:
+              json.dump(manifest, f, indent=2)
+              f.write("\n")
+          PY
+
+          find Games -name '.DS_Store' -delete
+
+      - name: Commit and push in reliable chunks
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git config user.name "Game Stash Importer"
+          git config user.email "actions@users.noreply.github.com"
+
+          git add games.json source-manifest.json "Game Artwork"
+          if ! git diff --cached --quiet; then
+            git commit -m "Add first batch catalog and artwork"
+            git push origin HEAD:main
+          fi
+
+          python3 - <<'PY' > /tmp/batches.txt
+          import os
+
+          roots = ["Games"]
+          files = []
+          for root in roots:
+              for base, dirs, names in os.walk(root):
+                  dirs.sort()
+                  names.sort()
+                  for name in names:
+                      path = os.path.join(base, name)
+                      if os.path.isfile(path):
+                          files.append((path, os.path.getsize(path)))
+
+          # Keep each push comfortably below a few hundred MB.
+          limit = 180 * 1024 * 1024
+          batch = []
+          total = 0
+          batch_no = 1
+
+          for path, size in files:
+              if batch and total + size > limit:
+                  print(f"__BATCH__ {batch_no}")
+                  for p in batch:
+                      print(p)
+                  batch_no += 1
+                  batch = []
+                  total = 0
+              batch.append(path)
+              total += size
+
+          if batch:
+              print(f"__BATCH__ {batch_no}")
+              for p in batch:
+                  print(p)
+          PY
+
+          batch_no=0
+          batch_file=/tmp/current-batch.txt
+          : > "$batch_file"
+
+          flush_batch() {
+            if [ "$batch_no" -eq 0 ] || [ ! -s "$batch_file" ]; then
+              return
+            fi
+
+            while IFS= read -r file; do
+              git add -- "$file"
+            done < "$batch_file"
+
+            if ! git diff --cached --quiet; then
+              git commit -m "Import wasm.rip games batch $batch_no"
+              git push origin HEAD:main
+            fi
+
+            : > "$batch_file"
+          }
+
+          while IFS= read -r line; do
+            if [[ "$line" == __BATCH__* ]]; then
+              flush_batch
+              batch_no="${line#__BATCH__ }"
+            else
+              printf '%s\n' "$line" >> "$batch_file"
+            fi
+          done < /tmp/batches.txt
+
+          flush_batch
+
+      - name: Verify imported payload
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+
+          with open("games.json", "r", encoding="utf-8") as f:
+              games = json.load(f)
+
+          missing = []
+          for game in games:
+              url = game.get("gameUrl", "")
+              if url.startswith("Games/") and not os.path.isfile(url):
+                  missing.append(url)
+
+              art = game.get("imageUrl", "")
+              if art.startswith("Game Artwork/") and not os.path.isfile(art):
+                  missing.append(art)
+
+          if missing:
+              raise SystemExit("Missing imported paths:\n" + "\n".join(missing))
+
+          count = sum(len(files) for _, _, files in os.walk("Games"))
+          print(f"Verified {len(games)} catalog entries and {count} game payload files.")
+          PY
