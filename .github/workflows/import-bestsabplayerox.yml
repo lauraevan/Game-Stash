@@ -1,0 +1,237 @@
+name: Import bestsabplayerox game batch
+
+on:
+  push:
+    paths:
+      - ".github/workflows/import-bestsabplayerox.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout Game Stash
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch source repos
+        run: |
+          git clone --depth=1 --branch main https://github.com/bestsabplayerox/html.git /tmp/zones-html
+          git clone --depth=1 --branch main https://github.com/bestsabplayerox/covers.git /tmp/zones-covers
+          curl -fsSL https://raw.githubusercontent.com/bestsabplayerox/assets/main/zones.json -o /tmp/zones.json
+
+      - name: Prepare games, artwork, and catalog
+        run: |
+          set -euo pipefail
+          rm -rf "Games/Zones" "Game Artwork/Zones"
+          mkdir -p "Games/Zones" "Game Artwork/Zones"
+
+          python3 - <<'PY'
+          import json
+          import os
+          import shutil
+
+          with open("/tmp/zones.json", "r", encoding="utf-8") as f:
+              zones = json.load(f)
+
+          fixes = {
+              "114-f.html": "114.html",
+              "266-a.html": "266.html",
+          }
+
+          imported = []
+          missing = []
+
+          for game in zones:
+              if game.get("id") == -1:
+                  continue
+
+              html_name = str(game["url"]).replace("{HTML_URL}/", "", 1)
+              html_name = fixes.get(html_name, html_name)
+              cover_name = str(game["cover"]).replace("{COVER_URL}/", "", 1)
+
+              html_src = os.path.join("/tmp/zones-html", html_name)
+              cover_src = os.path.join("/tmp/zones-covers", cover_name)
+
+              if not os.path.isfile(html_src):
+                  missing.append(f"HTML: {game['name']} -> {html_name}")
+                  continue
+              if not os.path.isfile(cover_src):
+                  missing.append(f"COVER: {game['name']} -> {cover_name}")
+                  continue
+
+              game_dst = os.path.join("Games", "Zones", html_name)
+              cover_dst = os.path.join("Game Artwork", "Zones", cover_name)
+
+              os.makedirs(os.path.dirname(game_dst), exist_ok=True)
+              os.makedirs(os.path.dirname(cover_dst), exist_ok=True)
+
+              shutil.copy2(html_src, game_dst)
+              shutil.copy2(cover_src, cover_dst)
+
+              item = {
+                  "id": f"zone-{game['id']}",
+                  "name": game["name"],
+                  "gameUrl": game_dst.replace(os.sep, "/"),
+                  "imageUrl": cover_dst.replace(os.sep, "/"),
+                  "source": "bestsabplayerox/zones",
+              }
+
+              for key in ("author", "authorLink", "special", "featured"):
+                  if key in game:
+                      item[key] = game[key]
+
+              imported.append(item)
+
+          if missing:
+              raise SystemExit("Missing referenced source files:\n" + "\n".join(missing))
+
+          with open("games.json", "r", encoding="utf-8") as f:
+              existing = json.load(f)
+
+          existing = [
+              g for g in existing
+              if g.get("source") != "bestsabplayerox/zones"
+          ]
+          merged = existing + imported
+
+          with open("games.json", "w", encoding="utf-8") as f:
+              json.dump(merged, f, indent=2, ensure_ascii=False)
+              f.write("\n")
+
+          manifest = {
+              "source": "bestsabplayerox/assets zones.json + html + covers",
+              "importedGames": len(imported),
+              "htmlBranch": "main",
+              "coversBranch": "main",
+              "repairedMappings": {
+                  "114-f.html": "114.html",
+                  "266-a.html": "266.html"
+              }
+          }
+          os.makedirs("catalog", exist_ok=True)
+          with open("catalog/bestsabplayerox-manifest.json", "w", encoding="utf-8") as f:
+              json.dump(manifest, f, indent=2)
+              f.write("\n")
+
+          print(f"Prepared {len(imported)} games.")
+          PY
+
+      - name: Commit catalog
+        run: |
+          set -euo pipefail
+          git config user.name "Game Stash Importer"
+          git config user.email "actions@users.noreply.github.com"
+
+          git add games.json catalog/bestsabplayerox-manifest.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Add bestsabplayerox game catalog"
+            git push origin HEAD:main
+          fi
+
+      - name: Commit payloads in chunks
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 - <<'PY' > /tmp/batches.txt
+          import os
+
+          files = []
+          for root in ("Games/Zones", "Game Artwork/Zones"):
+              for base, dirs, names in os.walk(root):
+                  dirs.sort()
+                  names.sort()
+                  for name in names:
+                      path = os.path.join(base, name)
+                      if os.path.isfile(path):
+                          files.append((path, os.path.getsize(path)))
+
+          files.sort()
+          limit = 120 * 1024 * 1024
+          batch = []
+          total = 0
+          batch_no = 1
+
+          for path, size in files:
+              if batch and total + size > limit:
+                  print(f"__BATCH__ {batch_no}")
+                  for p in batch:
+                      print(p)
+                  batch_no += 1
+                  batch = []
+                  total = 0
+              batch.append(path)
+              total += size
+
+          if batch:
+              print(f"__BATCH__ {batch_no}")
+              for p in batch:
+                  print(p)
+          PY
+
+          batch_no=0
+          batch_file=/tmp/current-batch.txt
+          : > "$batch_file"
+
+          flush_batch() {
+            if [ "$batch_no" -eq 0 ] || [ ! -s "$batch_file" ]; then
+              return
+            fi
+
+            while IFS= read -r file; do
+              git add -- "$file"
+            done < "$batch_file"
+
+            if ! git diff --cached --quiet; then
+              git commit -m "Import bestsabplayerox payload batch $batch_no"
+              git push origin HEAD:main
+            fi
+
+            : > "$batch_file"
+          }
+
+          while IFS= read -r line; do
+            if [[ "$line" == __BATCH__* ]]; then
+              flush_batch
+              batch_no="${line#__BATCH__ }"
+            else
+              printf '%s\n' "$line" >> "$batch_file"
+            fi
+          done < /tmp/batches.txt
+
+          flush_batch
+
+      - name: Verify import
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+
+          with open("games.json", "r", encoding="utf-8") as f:
+              games = json.load(f)
+
+          imported = [g for g in games if g.get("source") == "bestsabplayerox/zones"]
+          missing = []
+
+          for game in imported:
+              for field in ("gameUrl", "imageUrl"):
+                  path = game.get(field, "")
+                  if not os.path.isfile(path):
+                      missing.append(f"{game.get('name')}: {path}")
+
+          if len(imported) != 742:
+              raise SystemExit(f"Expected 742 imported games, got {len(imported)}")
+
+          if missing:
+              raise SystemExit("Missing imported files:\n" + "\n".join(missing))
+
+          print(f"Verified {len(imported)} games with matching HTML and artwork.")
+          PY
