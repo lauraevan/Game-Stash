@@ -184,3 +184,5 @@ jobs:
           count = sum(len(files) for _, _, files in os.walk("Games"))
           print(f"Verified {len(games)} catalog entries and {count} game payload files.")
           PY
+
+# trigger import
