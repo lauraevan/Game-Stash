@@ -1,0 +1,10 @@
+{
+  "source": "bestsabplayerox/assets zones.json + html + covers",
+  "importedGames": 742,
+  "htmlBranch": "main",
+  "coversBranch": "main",
+  "repairedMappings": {
+    "114-f.html": "114.html",
+    "266-a.html": "266.html"
+  }
+}
