@@ -1,0 +1,39 @@
+{
+  "source": "GoatTech-42/NEBULACDN",
+  "sourceCommit": "b955068b6eaaebb892b2f15d9db918a8508da412",
+  "catalogGames": 3075,
+  "sourceCatalogEntries": 3062,
+  "staleCatalogReferences": [
+    {
+      "id": "singlefile",
+      "name": "Singlefile",
+      "file": "games/singlefile.html"
+    }
+  ],
+  "sourceStats": {
+    "totalGames": 3062,
+    "totalSizeBytes": 748180865,
+    "totalSizeMB": 748.2,
+    "categories": {
+      "Other": 2044,
+      "Pokemon": 134,
+      "Platformer": 110,
+      "Mario": 106,
+      "Sonic": 74,
+      "Racing": 73,
+      "Strategy": 71,
+      "Fighting": 70,
+      "Sports": 68,
+      "Minecraft": 55,
+      "Shooter": 52,
+      "Horror": 51,
+      "Puzzle": 50,
+      "Zelda": 37,
+      "Simulation": 34,
+      "RPG": 33
+    }
+  },
+  "copiedPayloadFiles": 3211,
+  "copiedPayloadBytes": 2308460686,
+  "note": "Game payloads are copied into the shared Games root; supporting assets retain their relative subdirectories."
+}
