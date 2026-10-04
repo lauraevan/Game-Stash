@@ -62,7 +62,7 @@ jobs:
               echo "Collision: Games/$base"
               exit 1
             fi
-            git mv "$file" "Games/$base"
+            git mv --sparse "$file" "Games/$base"
           done
 
           find "Game Artwork/Zones" -maxdepth 1 -type f -print0 | while IFS= read -r -d '' file; do
@@ -71,7 +71,7 @@ jobs:
               echo "Collision: Game Artwork/$base"
               exit 1
             fi
-            git mv "$file" "Game Artwork/$base"
+            git mv --sparse "$file" "Game Artwork/$base"
           done
 
       - name: Verify flattened layout
