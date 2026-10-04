@@ -1,0 +1,119 @@
+name: Flatten Zones import
+
+on:
+  push:
+    paths:
+      - ".github/workflows/flatten-zones.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  flatten:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout only files needed for move
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            games.json
+            Games/Zones
+            Game Artwork/Zones
+            .github/workflows/flatten-zones.yml
+
+      - name: Flatten game and artwork folders
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 - <<'PY'
+          import json
+
+          with open("games.json", "r", encoding="utf-8") as f:
+              games = json.load(f)
+
+          changed = 0
+          for game in games:
+              if game.get("source") == "bestsabplayerox/zones":
+                  old_game = game.get("gameUrl", "")
+                  old_art = game.get("imageUrl", "")
+                  game["gameUrl"] = old_game.replace("Games/Zones/", "Games/", 1)
+                  game["imageUrl"] = old_art.replace("Game Artwork/Zones/", "Game Artwork/", 1)
+                  changed += 1
+
+          if changed != 742:
+              raise SystemExit(f"Expected 742 Zones catalog entries, found {changed}")
+
+          with open("games.json", "w", encoding="utf-8") as f:
+              json.dump(games, f, indent=2, ensure_ascii=False)
+              f.write("\n")
+          PY
+
+          find "Games/Zones" -maxdepth 1 -type f -print0 | while IFS= read -r -d '' file; do
+            base="$(basename "$file")"
+            if [ -e "Games/$base" ]; then
+              echo "Collision: Games/$base"
+              exit 1
+            fi
+            git mv "$file" "Games/$base"
+          done
+
+          find "Game Artwork/Zones" -maxdepth 1 -type f -print0 | while IFS= read -r -d '' file; do
+            base="$(basename "$file")"
+            if [ -e "Game Artwork/$base" ]; then
+              echo "Collision: Game Artwork/$base"
+              exit 1
+            fi
+            git mv "$file" "Game Artwork/$base"
+          done
+
+      - name: Verify flattened layout
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          import os
+
+          with open("games.json", "r", encoding="utf-8") as f:
+              games = json.load(f)
+
+          imported = [g for g in games if g.get("source") == "bestsabplayerox/zones"]
+          missing = []
+          nested = []
+
+          for game in imported:
+              gu = game["gameUrl"]
+              iu = game["imageUrl"]
+              if "/Zones/" in gu or "/Zones/" in iu:
+                  nested.append((game["name"], gu, iu))
+              if not os.path.isfile(gu):
+                  missing.append(gu)
+              if not os.path.isfile(iu):
+                  missing.append(iu)
+
+          if len(imported) != 742:
+              raise SystemExit(f"Expected 742 entries, got {len(imported)}")
+          if nested:
+              raise SystemExit(f"Nested Zones paths remain: {nested[:10]}")
+          if missing:
+              raise SystemExit("Missing flattened files:\n" + "\n".join(missing[:50]))
+
+          print("Verified all 742 games and covers in the shared root folders.")
+          PY
+
+      - name: Commit flattened layout
+        run: |
+          set -euo pipefail
+          git config user.name "Game Stash Importer"
+          git config user.email "actions@users.noreply.github.com"
+          git add games.json Games "Game Artwork"
+          git commit -m "Flatten imported games into shared folders"
+          git push origin HEAD:main
